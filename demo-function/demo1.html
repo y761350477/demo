@@ -1,0 +1,83 @@
+<!--
+  author YC
+  create 2018/3/13 20:14
+  滑轮事件来实现div隐藏后固定到头部的效果
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo1</title>
+</head>
+<style>
+    #div1 {
+        height: 60px;
+        width: 600px;
+        background-color: orange;
+    }
+
+    .fix {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+    }
+</style>
+<body>
+<div id="div" style="height: 2000px;"></div>
+<div id="div1"></div>
+<button class="fix">Click</button>
+<div style="height: 2000px; width: 100px;"></div>
+
+<script src="../resource/js/jquery-3.2.1.js"></script>
+<script>
+
+    $(function () {
+        $("button").click(function () {
+
+            // div的上下距离(含margin,padding)
+            var out = $('#div1').outerHeight();
+            // alert(out);
+
+            // div到窗口顶部的距离(从div的border算)
+            var top = $('#div1').offset().top;
+            alert("top: " + top);
+
+            // 窗口的可视高度
+            var height = $(window).height();
+            // alert(height);
+
+            // 滑轮移动距离
+            var height1 = $(window).scrollTop();
+            alert(height1);
+        });
+
+        // 触发滑轮事件
+        $(this).scroll(function () {
+
+            // 获取参照div用于恢复id=div1样式为不固定
+            var divHeight = $("#div").outerHeight();
+            var divToTop = $("#div").offset().top;
+            var divInfo = divHeight + divToTop;
+            var scrollInfo = $(window).scrollTop();
+            if (divInfo >= scrollInfo) {
+                $("#div1").attr("class", "");
+            }
+
+            // 情况一: 元素上滑
+            var test = $(window).scrollTop() > ($('#div1').offset().top + $('#div1').outerHeight());
+            if (test) {
+                $("#div1").attr("class", "fix");
+            }
+
+            // 情况二: 元素下滑
+            /*var test1 = $(window).scrollTop() < ($('#div1').offset().top - $(window).height());
+            if (test1) {
+                $("#div1").attr("class", "fix");
+            }*/
+
+        });
+    });
+
+</script>
+</body>
+</html>
